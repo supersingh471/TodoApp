@@ -55,7 +55,7 @@ const todo = new mongoose({
 const User = mongoose.model("User", userSchema);
 const Todo = mongoose.model("Todo", todo);
 
-module.exports{
+module.exports = {
 	User,
 	Todo
 };
