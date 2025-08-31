@@ -6,3 +6,49 @@ const { User, Todo } = require("./db");
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("./config");
+
+const signupBody = zod.object({
+	username: zod.string().email(),
+	firstname: zod.string(),
+	lastname: zod.string(),
+	password: zod.string(),
+})
+
+router.post("/signup", async (req, res) => {
+	const validation = signupBody.safeParse(req.body);
+
+	if(!validation.success) {
+		return res.status(400).json({
+			message: "Invalid input"
+		})
+	}
+
+	const existingUser = await User.find({
+		username: req.body.username
+	})
+
+	if(existingUser) {
+		return res.status(400).json({
+			message: "Username already exist"
+		})
+	}
+
+	const user = await User.create({
+		username: req.body.username,
+		firstname: req.body.firstname,
+		lastname: req.body.lastname,
+		password: req.body.password
+	})
+
+	const userId = user._id;
+
+	const token = jwt.sign({
+		userId,
+	},JWT_SECRET);
+
+	res.json({
+		message: "User register successfully",
+		token
+	})
+
+})
