@@ -1,3 +1,4 @@
+//user.js
 //signup and signin routes
 const express = require("express");
 
@@ -8,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 
 const signupBody = zod.object({
-	username: zod.string().email(),
+	username: zod.string(),
 	firstname: zod.string(),
 	lastname: zod.string(),
 	password: zod.string(),
@@ -23,7 +24,7 @@ router.post("/signup", async (req, res) => {
 		})
 	}
 
-	const existingUser = await User.find({
+	const existingUser = await User.findOne({
 		username: req.body.username
 	})
 
@@ -67,7 +68,7 @@ router.post("/signin", async (req, res) =>{
 		})
 	}
 
-	const user = User.find({
+	const user = await User.findOne({
 		username: req.body.username,
 		password: req.body.password
 	})
@@ -82,3 +83,5 @@ router.post("/signin", async (req, res) =>{
 		token
 	});
 })
+
+module.exports = router;

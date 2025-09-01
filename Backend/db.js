@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("");
+mongoose.connect("mongodb+srv://cohort2:supersingh471@cohort2.6d1abj6.mongodb.net/TodoApp");
 
 const userSchema = new mongoose.Schema({
 	username: {
@@ -9,27 +9,27 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 		lowercase: true,
-		minLength: 5,
-		maxLength: 10
+		minlength: 5,
+		maxlength: 10
 	},
 
 	firstname: {
 		type: String,
 		required: true,
-		maxLength: 20
+		maxlength: 20
 	},
 
 	lastname: {
 		type: String,
 		required: true,
-		maxLength: 20
+		maxlength: 20
 	},
 
 	password: {
 		type: String,
 		required: true,
-		minLength: 5,
-		maxLength: 20,
+		minlength: 5,
+		maxlength: 20,
 	}
 })
 
@@ -37,13 +37,13 @@ const todo = new mongoose.Schema({
 	task: {
 		type: String,
 		required: true,
-		maxLength: 20
+		maxlength: 20
 	},
 
 	status: {
 		type: String,
 		required: true,
-		maxLength: 20
+		maxlength: 20
 	},
 
 	deadlines: {
