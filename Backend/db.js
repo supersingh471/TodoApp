@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.connect("");
 
-const userSchema = new mongoose ({
+const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
 		unique: true,
@@ -33,7 +33,7 @@ const userSchema = new mongoose ({
 	}
 })
 
-const todo = new mongoose({
+const todo = new mongoose.Schema({
 	task: {
 		type: String,
 		required: true,
