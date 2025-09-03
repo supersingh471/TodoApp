@@ -3,18 +3,12 @@
 const express = require("express");
 
 const router = express.Router();
-const { User, Todo } = require("../db");
-const zod = require("zod");
+const { User } = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const { signupBody, signinBody } = require("../types");
 
-const signupBody = zod.object({
-	username: zod.string(),
-	firstname: zod.string(),
-	lastname: zod.string(),
-	password: zod.string(),
-})
-
+//route for user register
 router.post("/signup", async (req, res) => {
 	const validation = signupBody.safeParse(req.body);
 
@@ -54,11 +48,7 @@ router.post("/signup", async (req, res) => {
 
 })
 
-const signinBody = zod.object({
-	username: zod.string(),
-	password: zod.string()
-});
-
+//route for user signin
 router.post("/signin", async (req, res) =>{
 	const validation = signinBody.safeParse(req.body);
 
@@ -73,15 +63,13 @@ router.post("/signin", async (req, res) =>{
 		password: req.body.password
 	})
 
-	if(user) {
-		const token = jwt.sign({
-			userId: user._id
-		},JWT_SECRET);
-	}
-
-	res.json({
-		token
-	});
+	if(!user) {
+		return res.status(401).json({ message: "Invalid credentials" });
+	  }
+	
+	  const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+	
+	  res.json({ token });
 })
 
 module.exports = router;
