@@ -5,7 +5,7 @@ const router = express.Router();
 const { Todo } = require("../db");
 const { createTodo, updateTodo } = require("../types");
 
-//route for entering todo
+//route for creating todo
 router.post("/todo", async (req, res) => {
 	const parsePayload = createTodo.safeParse(req.body);
 	if(!parsePayload.success) {
@@ -24,6 +24,32 @@ router.post("/todo", async (req, res) => {
 		message: "Todo created successfully"
 	})
 	
+});
+
+//route for getting todo
+router.get("/todos", async (req, res) => {
+	const id = req.query.id;
+
+	
+		try{
+			if(id) {
+				const todoItem = await Todo.findOne({_id: id, userId: req.userId});
+				if(!todoItem) {
+					return res.status(400).json({
+						message: "Invalid token"
+					});
+				}
+				return res.status(200).json({
+					todo: todoItem
+				})
+			}
+
+			const todos = await Todo.find({userId: userId});
+			return res.status(200).json({todo: todos});
+
+		}catch (e) {
+			return res.status(500).json({msg: "Server error", error: e.message});
+		}
 })
 
 module.exports = router;
