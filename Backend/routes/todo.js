@@ -3,10 +3,11 @@
 const express = require("express");
 const router = express.Router();
 const { Todo } = require("../db");
+const { authMiddleware } = require("../authMiddleware");
 const { createTodo, updateTodo } = require("../types");
 
 //route for creating todo
-router.post("/todo", async (req, res) => {
+router.post("/todo", authMiddleware, async (req, res) => {
 	const parsePayload = createTodo.safeParse(req.body);
 	if(!parsePayload.success) {
 		return res.status(400).json({
@@ -27,7 +28,7 @@ router.post("/todo", async (req, res) => {
 });
 
 //route for getting todo
-router.get("/todos", async (req, res) => {
+router.get("/todos", authMiddleware, async (req, res) => {
 	const id = req.query.id;
 
 	
