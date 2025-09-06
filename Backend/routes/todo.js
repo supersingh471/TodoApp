@@ -5,6 +5,7 @@ const router = express.Router();
 const { Todo } = require("../db");
 const { authMiddleware } = require("../authMiddleware");
 const { createTodo, updateTodo } = require("../types");
+const { safeParse } = require("zod");
 
 //route for creating todo
 router.post("/todo", authMiddleware, async (req, res) => {
@@ -51,6 +52,40 @@ router.get("/todos", authMiddleware, async (req, res) => {
 		}catch (e) {
 			return res.status(500).json({msg: "Server error", error: e.message});
 		}
-})
+});
+
+//route for todo update
+router.post("/completed", async (req, res) => {
+	const updatePayload = updateTodo.safeParse(req.body);
+	if(!updatePayload.success) {
+		return res.status(401).json({
+			message: "Invalid input"
+		})
+	}
+
+	await Todo.updateOne({
+		_id: req.body.id
+	});
+
+	return res.status(200).json({
+		message: "Todo Updated"
+	});
+});
+
+//route for deleting todo
+router.delete("/delete", async (req, res) => {
+	const deletePayload = req.params.id;
+	if(!deletePayload === _id) {
+		return res.status(401).json({
+			message: "Invalid user"
+		})
+	}
+
+	await Todo.findByIdAndDelete(deletePayload);
+
+	return res.status(200).json({
+		message: "Todo Deleted Successfully"
+	})
+});
 
 module.exports = router;

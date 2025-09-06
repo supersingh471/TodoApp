@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { boolean } = require("zod");
 
 mongoose.connect("mongodb+srv://cohort2:supersingh471@cohort2.6d1abj6.mongodb.net/TodoApp");
 
@@ -43,6 +44,7 @@ const todo = new mongoose.Schema({
 	status: {
 		type: String,
 		required: true,
+		enum: ["pending", "in-progress", "completed"],
 		maxlength: 20
 	},
 
@@ -55,7 +57,8 @@ const todo = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true
-	}
+	},
+
 })
 
 const User = mongoose.model("User", userSchema);
