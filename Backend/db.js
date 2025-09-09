@@ -48,7 +48,7 @@ const todo = new mongoose.Schema({
 		maxlength: 20
 	},
 
-	deadlines: {
+	deadline: {
 		type: Number,
 		required: true,
 	},
