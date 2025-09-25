@@ -1,14 +1,23 @@
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Dashboard() {
-	const todos = [
-	  { task: "Complete Assignment", status: "Completed", deadline: "10/11/2023, 12:00 PM" },
-	  { task: "Submit Project", status: "Completed", deadline: "10/11/2023, 5:22 PM" },
-	  { task: "Practice DSA", status: "Pending", deadline: "10/11/2023, 7:00 PM" },
-	  { task: "Fix the bug", status: "Pending", deadline: "10/11/2023, 8:30 PM" },
-	  
-	];
-  
+	const [task, setTask] = useState("");
+	const [status, setStatus] = useState("");
+	const [deadline, setDeadline] = useState();
+
+	const [todos, setTodos] = useState([]);	
+
+	const fetchTodos = async () => {
+					const response = axios.get("http://localhost:3000/api/v1/todo");
+					setTodos(response.date);
+	}
+
+	useEffect(() => {
+		fetchTodos();
+
+	}, [setTodos]);
+
 	return (
 		
 	  <div className="flex bg-gray-200 justify-center itmes-center h-screen p-18">
@@ -19,6 +28,7 @@ export default function Dashboard() {
 				<h2>Todo List</h2>
 				</div>
 				<div className="space-y-4">
+	
 				{todos.map((todo, id) => (
 					<div key={id} className="flex bg-gray-900 py-1.5 px-2 mr-5 ml-5 rounded-xl text-white">
 						<div className="flex flex-col w-full p-2 h-20 font-semibold text-lg">
@@ -42,16 +52,27 @@ export default function Dashboard() {
 			<div className="flex flex-col rounded-xl bg-black">
 				<div className="m-6 text-4xl font-bold text-white"><h2>Add Task</h2></div>
 				<form className="px-8 py-2 flex flex-col gap-6">
-					<input placeholder="task" type="text" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
-					<input placeholder="status" type="text" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
-					<input type="datetime-local" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
+					<input onChange={(e) => {
+						setTask(e.target.value);
+					}} placeholder="task" type="text" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
+					<input onChange={(e) => {
+						setStatus(e.target.value);
+					}} placeholder="status" type="text" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
+					<input onChange={(e) => {
+						setDeadline(e.target.value);
+					}} type="datetime-local" className="bg-gray-900 focus:outline-none focus:border-3 text-white border-2 border-purple-500 w-full px-2 py-3 rounded-xl"/>
 				</form>
 				<div className="m-15 text-white font-bold text-lg">
-					<button className="bg-gradient-to-r from-purple-500 to-pink-600 w-full h-12 rounded-4xl cursor-pointer">Add Task</button>
+					<button onClick={async () => {
+						await axios.post("http://localhost:3000/api/v1/todo", {
+							task: task,
+							status: status,
+							deadline: deadline
+						});
+					}} className="bg-gradient-to-r from-purple-500 to-pink-600 w-full h-12 rounded-4xl cursor-pointer">Add Task</button>
 				</div>
 			</div>
 		</div>
 	  </div>
 	);
   }
-  
