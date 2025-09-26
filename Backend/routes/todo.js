@@ -5,7 +5,6 @@ const router = express.Router();
 const { Todo } = require("../db");
 const { authMiddleware } = require("../authMiddleware");
 const { createTodo, updateTodo } = require("../types");
-const { safeParse } = require("zod");
 
 //route for creating todo
 router.post("/todo", authMiddleware, async (req, res) => {

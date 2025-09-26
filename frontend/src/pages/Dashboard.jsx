@@ -9,14 +9,14 @@ export default function Dashboard() {
 	const [todos, setTodos] = useState([]);	
 
 	const fetchTodos = async () => {
-					const response = axios.get("http://localhost:3000/api/v1/todo");
-					setTodos(response.date);
+					const response = await axios.get("http://localhost:3000/api/v1/todo");
+					setTodos(response.data);
 	}
 
 	useEffect(() => {
 		fetchTodos();
 
-	}, [setTodos]);
+	}, []);
 
 	return (
 		
@@ -29,7 +29,8 @@ export default function Dashboard() {
 				</div>
 				<div className="space-y-4">
 	
-				{todos.map((todo, id) => (
+				{todos.length > 0 ? (
+					todos.map((todo, id) => (
 					<div key={id} className="flex bg-gray-900 py-1.5 px-2 mr-5 ml-5 rounded-xl text-white">
 						<div className="flex flex-col w-full p-2 h-20 font-semibold text-lg">
 							<h4>{todo.task}</h4>
@@ -44,7 +45,8 @@ export default function Dashboard() {
 							<button className="bg-red-600 py-2 px-5 rounded-xl text-lg cursor-pointer">Delete</button>
 						</div>
 					</div> 
-				))}
+				))
+			)	: ( <p className="text-gray-400 ml-5">No todos yet</p>)}
 				</div>
 			</div>
 
@@ -69,6 +71,7 @@ export default function Dashboard() {
 							status: status,
 							deadline: deadline
 						});
+						fetchTodos();
 					}} className="bg-gradient-to-r from-purple-500 to-pink-600 w-full h-12 rounded-4xl cursor-pointer">Add Task</button>
 				</div>
 			</div>
