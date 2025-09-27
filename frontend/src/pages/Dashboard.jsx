@@ -9,7 +9,7 @@ export default function Dashboard() {
 	const [todos, setTodos] = useState([]);	
 
 	const fetchTodos = async () => {
-					const response = await axios.get("http://localhost:3000/api/v1/todo");
+					const response = await axios.get("http://localhost:3000/api/v1/todo/todo");
 					setTodos(response.data);
 	}
 
@@ -66,7 +66,7 @@ export default function Dashboard() {
 				</form>
 				<div className="m-15 text-white font-bold text-lg">
 					<button onClick={async () => {
-						await axios.post("http://localhost:3000/api/v1/todo", {
+						await axios.post("http://localhost:3000/api/v1/todo/todo", {
 							task: task,
 							status: status,
 							deadline: deadline
